@@ -10,17 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_03_230443) do
+ActiveRecord::Schema.define(version: 2020_09_07_021228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "empregados", force: :cascade do |t|
     t.string "nome"
-    t.string "data_nascimento"
+    t.string "data_de_nascimento"
     t.string "cpf"
+    t.string "banco"
+    t.string "agencia"
+    t.string "conta"
+    t.string "senha"
+    t.string "email"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "solicitacoes", force: :cascade do |t|
+    t.bigint "empregado_id", null: false
+    t.decimal "valor"
+    t.string "data_da_solicitacao"
+    t.string "status"
+    t.string "taxa"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["empregado_id"], name: "index_solicitacoes_on_empregado_id"
+  end
+
+  add_foreign_key "solicitacoes", "empregados"
 end
