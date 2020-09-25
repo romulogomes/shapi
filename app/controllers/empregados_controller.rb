@@ -1,5 +1,20 @@
 class EmpregadosController < ApplicationController
-  before_action :set_empregado, only: [:show, :update, :destroy]
+  before_action :set_empregado, only: [:show, :update, :destroy, :informacoes]
+
+  # FIXME: Romulo - 1 controller por tela
+  # FIXME: Romulo - solicitacao por mes
+  def informacoes
+    solicitacoes = Solicitacao.where(empregado_id: params[:id])
+    valor_ja_solicitado = 150
+    salario_disponivel = (@empregado.salario || 0) - valor_ja_solicitado
+
+    infos = {
+      valor_ja_solicitado: valor_ja_solicitado,
+      salario_disponivel:  salario_disponivel
+    }
+    
+    render json: infos
+  end
 
   # GET /empregados
   def index
