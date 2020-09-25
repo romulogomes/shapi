@@ -4,7 +4,7 @@ class EmpregadosController < ApplicationController
   # FIXME: Romulo - 1 controller por tela
   # FIXME: Romulo - solicitacao por mes
   def informacoes
-    solicitacoes = Solicitacao.where(empregado_id: params[:id])
+    solicitacoes = Solicitacao.where(empregado_id: parametros[:id])
     valor_ja_solicitado = 150
     salario_disponivel = (@empregado.salario || 0) - valor_ja_solicitado
 
@@ -14,6 +14,17 @@ class EmpregadosController < ApplicationController
     }
     
     render json: infos
+  end
+
+  def login
+    empregado = Empregado.find_by(cpf: parametros[:cpf], senha: parametros[:senha])
+
+    if empregado.nil?
+      render json: { codigo: "usuario_nao_encontrado" }, status: 404
+    else
+      empregado.senha = nil
+      render json: empregado
+    end
   end
 
   # GET /empregados
@@ -30,7 +41,7 @@ class EmpregadosController < ApplicationController
 
   # POST /empregados
   def create
-    @empregado = Empregado.new(empregado_params)
+    @empregado = Empregado.new(parametros)
 
     if @empregado.save
       render json: @empregado, status: :created, location: @empregado
@@ -41,7 +52,7 @@ class EmpregadosController < ApplicationController
 
   # PATCH/PUT /empregados/1
   def update
-    if @empregado.update(empregado_params)
+    if @empregado.update(parametros)
       render json: @empregado
     else
       render json: @empregado.errors, status: :unprocessable_entity
@@ -59,8 +70,5 @@ class EmpregadosController < ApplicationController
       @empregado = Empregado.find(params[:id])
     end
 
-    # Only allow a trusted parameter "white list" through.
-    def empregado_params
-      params.require(:empregado).permit(:nome, :data_nascimento, :cpf)
-    end
+    
 end
