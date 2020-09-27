@@ -9,7 +9,7 @@ class SolicitacoesController < ApplicationController
   end
 
   def listar_solicitacoes_por_empregado
-    @solicitacoes = Solicitacao.where(empregado_id: params[:id])
+    @solicitacoes = Solicitacao.where(empregado_id: parametros[:id])
 
     render json: @solicitacoes
   end
@@ -21,7 +21,7 @@ class SolicitacoesController < ApplicationController
 
   # POST /solicitacoes
   def create
-    @solicitacao = Solicitacao.new(solicitacao_params)
+    @solicitacao = Solicitacao.new(parametros["solicitacao"])
 
     if @solicitacao.save
       render json: @solicitacao, status: :created, location: @solicitacao
@@ -32,7 +32,7 @@ class SolicitacoesController < ApplicationController
 
   # PATCH/PUT /solicitacoes/1
   def update
-    if @solicitacao.update(solicitacao_params)
+    if @solicitacao.update(parametros["solicitacao"])
       render json: @solicitacao
     else
       render json: @solicitacao.errors, status: :unprocessable_entity
@@ -47,11 +47,6 @@ class SolicitacoesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_solicitacao
-      @solicitacao = Solicitacao.find(params[:id])
-    end
-
-    # Only allow a trusted parameter "white list" through.
-    def solicitacao_params
-      params.require(:solicitacao).permit(:empregado_id, :valor)
+      @solicitacao = Solicitacao.find(parametros[:id])
     end
 end

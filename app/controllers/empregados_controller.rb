@@ -1,24 +1,21 @@
 class EmpregadosController < ApplicationController
-  before_action :set_empregado, only: [:show, :update, :destroy, :informacoes]
+  before_action :set_empregado, only: [:show, :update, :destroy]
 
   # FIXME: Romulo - 1 controller por tela
-  # FIXME: Romulo - solicitacao por mes
   def informacoes
-    solicitacoes = Solicitacao.where(empregado_id: parametros[:id])
-    valor_ja_solicitado = 150
-    salario_disponivel = (@empregado.salario || 0) - valor_ja_solicitado
+    empregado = Empregado.find(params[:empregado_id])
+    solicitacoes = Solicitacao.where(empregado_id: parametros[:empregado_id], mes_ano: parametros[:mes_ano])
+    valor_ja_solicitado = solicitacoes.sum(&:valor)
+    salario_disponivel = (empregado.salario || 0) - valor_ja_solicitado
 
-    infos = {
+    render json: {
       valor_ja_solicitado: valor_ja_solicitado,
       salario_disponivel:  salario_disponivel
     }
-    
-    render json: infos
   end
 
   def login
     empregado = Empregado.find_by(cpf: parametros[:cpf], senha: parametros[:senha])
-
     if empregado.nil?
       render json: { codigo: "usuario_nao_encontrado" }, status: 404
     else
@@ -41,7 +38,7 @@ class EmpregadosController < ApplicationController
 
   # POST /empregados
   def create
-    @empregado = Empregado.new(parametros)
+    @empregado = Empregado.new(parametros["empregado"])
 
     if @empregado.save
       render json: @empregado, status: :created, location: @empregado
@@ -52,7 +49,7 @@ class EmpregadosController < ApplicationController
 
   # PATCH/PUT /empregados/1
   def update
-    if @empregado.update(parametros)
+    if @empregado.update(parametros["empregado"])
       render json: @empregado
     else
       render json: @empregado.errors, status: :unprocessable_entity
