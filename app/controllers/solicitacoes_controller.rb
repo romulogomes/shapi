@@ -4,14 +4,21 @@ class SolicitacoesController < ApplicationController
   # GET /solicitacoes -- FIXME ROmulo - remover
   def index
     @solicitacoes = Solicitacao.all
-
     render json: @solicitacoes
   end
 
   def listar_solicitacoes_por_empregado
     @solicitacoes = Solicitacao.where(empregado_id: parametros[:id])
-
     render json: @solicitacoes
+  end
+
+  def listar_solicitacoes_por_mes_ano
+    @solicitacoes = Solicitacao.where(mes_ano: parametros[:mes_ano])
+    render json: @solicitacoes
+  end
+
+  def alterar_status
+    Solicitacao.find(parametros[:id]).update_column(:status, parametros[:status])
   end
 
   # GET /solicitacoes/1
