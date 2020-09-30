@@ -13,8 +13,20 @@ class SolicitacoesController < ApplicationController
   end
 
   def listar_solicitacoes_por_mes_ano
-    @solicitacoes = Solicitacao.where(mes_ano: parametros[:mes_ano])
-    render json: @solicitacoes
+    solicitacoes = Solicitacao.where(mes_ano: parametros[:mes_ano])
+    retorno = solicitacoes.map do |solicitacao|
+      empregado = Empregado.find(solicitacao.empregado_id)
+      {
+        id:                  solicitacao.id,
+        nome:                empregado.nome,
+        cpf:                 empregado.cpf,
+        valor:               solicitacao.valor,
+        data_da_solicitacao: solicitacao.data_da_solicitacao,
+        status:              solicitacao.status
+      }
+    end
+
+    render json: retorno
   end
 
   def alterar_status
