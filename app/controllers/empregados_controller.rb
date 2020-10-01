@@ -8,7 +8,7 @@ class EmpregadosController < ApplicationController
     empregado = Empregado.find(params[:empregado_id])
     solicitacoes = Solicitacao.where(empregado_id: parametros[:empregado_id], mes_ano: parametros[:mes_ano])
     valor_ja_solicitado = solicitacoes.sum(&:valor)
-    salario_disponivel = (empregado.salario || 0) - valor_ja_solicitado
+    salario_disponivel = (empregado.salario || 0) - valor_ja_solicitado # FIXME Romuloset - taxas
 
     render json: {
       valor_ja_solicitado: valor_ja_solicitado,
