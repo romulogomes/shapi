@@ -8,7 +8,7 @@ class SolicitacoesController < ApplicationController
   end
 
   def listar_solicitacoes_por_empregado
-    @solicitacoes = Solicitacao.where(empregado_id: parametros[:id])
+    @solicitacoes = Solicitacao.where(empregado_id: parametros[:empregado_id], mes_ano: parametros[:mes_ano])
     render json: @solicitacoes
   end
 
