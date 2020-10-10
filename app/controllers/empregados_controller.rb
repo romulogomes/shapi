@@ -4,6 +4,7 @@ class EmpregadosController < ApplicationController
   # FIXME: Romulo - 1 controller por tela
   # FIXME: ROmulo - Empregados por empresa
   # FIXME: ROmulo - Status do empregado
+  # FIXME: ROmulo - Validar Acesso ao empregado 
   def informacoes
     empregado = Empregado.find(params[:empregado_id])
     solicitacoes = Solicitacao.where(empregado_id: parametros[:empregado_id], mes_ano: parametros[:mes_ano])

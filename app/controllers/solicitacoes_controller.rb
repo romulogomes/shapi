@@ -13,7 +13,7 @@ class SolicitacoesController < ApplicationController
   end
 
   def listar_solicitacoes_por_mes_ano
-    solicitacoes = Solicitacao.where(mes_ano: parametros[:mes_ano])
+    solicitacoes = Solicitacao.where(mes_ano: parametros[:mes_ano], empresa_id: parametros[:empresa_id])
     retorno = solicitacoes.map do |solicitacao|
       empregado = Empregado.find(solicitacao.empregado_id)
       {
@@ -64,8 +64,8 @@ class SolicitacoesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_solicitacao
-      @solicitacao = Solicitacao.find(parametros[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_solicitacao
+    @solicitacao = Solicitacao.find(parametros[:id])
+  end
 end
