@@ -29,12 +29,12 @@ class EmpregadosController < ApplicationController
 
   def salvar_dados_empregado
     @empregado.update( 
-      nome:    parametros[:nome:],
-      cpf:     parametros[:cpf:],
-      email:   parametros[:email:],
-      banco:   parametros[:banco:],
-      agencia: parametros[:agencia:],
-      conta:   parametros[:conta:],
+      nome:    parametros[:nome],
+      cpf:     parametros[:cpf],
+      email:   parametros[:email],
+      banco:   parametros[:banco],
+      agencia: parametros[:agencia],
+      conta:   parametros[:conta],
     )
 
     render json: @empregado

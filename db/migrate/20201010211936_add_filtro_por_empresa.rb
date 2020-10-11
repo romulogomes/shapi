@@ -8,6 +8,9 @@ class AddFiltroPorEmpresa < ActiveRecord::Migration[6.0]
       t.timestamps
     end
 
+    execute "INSERT INTO empresas (nome, taxa, ativa, created_at , updated_at) values ('Farmácia do Jauro', 7.00, true, now(), now())"
+    execute "INSERT INTO empresas (nome, taxa, ativa, created_at , updated_at) values ('Empresa de Teste', 8.70, true, now(), now())"
+    
     add_reference :empregados, :empresa, foreign_key: true
     add_reference :solicitacoes, :empresa, foreign_key: true
   end
