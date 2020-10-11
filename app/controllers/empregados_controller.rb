@@ -1,15 +1,15 @@
 class EmpregadosController < ApplicationController
-  before_action :set_empregado, only: [:show, :update, :destroy]
+  before_action :set_empregado, only: [:show, :update, :destroy, :salvar_dados_empregado]
 
   # FIXME: Romulo - 1 controller por tela
-  # FIXME: ROmulo - Empregados por empresa
   # FIXME: ROmulo - Status do empregado
-  # FIXME: ROmulo - Validar Acesso ao empregado 
+  # FIXME: ROmulo - Validar Acesso ao empregado
+
   def informacoes
     empregado = Empregado.find(params[:empregado_id])
     solicitacoes = Solicitacao.where(empregado_id: parametros[:empregado_id], mes_ano: parametros[:mes_ano])
     valor_ja_solicitado = solicitacoes.sum(&:valor)
-    salario_disponivel = (empregado.salario || 0) - valor_ja_solicitado # FIXME Romuloset - taxas
+    salario_disponivel = (empregado.salario || 0) - valor_ja_solicitado - solicitacoes.sum(&:taxa) # FIXME Romuloset - taxas
 
     render json: {
       valor_ja_solicitado: valor_ja_solicitado,
@@ -25,6 +25,26 @@ class EmpregadosController < ApplicationController
       empregado.senha = nil
       render json: empregado
     end
+  end
+
+  def salvar_dados_empregado
+    @empregado.update( 
+      nome:    parametros[:nome:],
+      cpf:     parametros[:cpf:],
+      email:   parametros[:email:],
+      banco:   parametros[:banco:],
+      agencia: parametros[:agencia:],
+      conta:   parametros[:conta:],
+    )
+
+    render json: @empregado
+  end
+
+  # GET /empregados
+  def listar_empregados_por_empresa
+    @empregados = Empregado.where(empresa_id: parametros[:empresa_id])
+
+    render json: @empregados
   end
 
   # GET /empregados
