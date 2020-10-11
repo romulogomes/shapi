@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_25_000042) do
+ActiveRecord::Schema.define(version: 2020_10_11_201804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,16 @@ ActiveRecord::Schema.define(version: 2020_09_25_000042) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.decimal "salario", precision: 20, scale: 2
+    t.bigint "empresa_id"
+    t.index ["empresa_id"], name: "index_empregados_on_empresa_id"
+  end
+
+  create_table "empresas", force: :cascade do |t|
+    t.string "nome"
+    t.decimal "taxa", precision: 20, scale: 2
+    t.boolean "ativa", default: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "solicitacoes", force: :cascade do |t|
@@ -34,12 +44,16 @@ ActiveRecord::Schema.define(version: 2020_09_25_000042) do
     t.decimal "valor"
     t.string "data_da_solicitacao"
     t.string "status"
-    t.string "taxa"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "mes_ano"
+    t.bigint "empresa_id"
+    t.decimal "taxa", precision: 20, scale: 2
     t.index ["empregado_id"], name: "index_solicitacoes_on_empregado_id"
+    t.index ["empresa_id"], name: "index_solicitacoes_on_empresa_id"
   end
 
+  add_foreign_key "empregados", "empresas"
   add_foreign_key "solicitacoes", "empregados"
+  add_foreign_key "solicitacoes", "empresas"
 end
