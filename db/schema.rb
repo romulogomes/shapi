@@ -42,6 +42,9 @@ ActiveRecord::Schema.define(version: 2020_10_10_211936) do
   create_table "solicitacoes", force: :cascade do |t|
     t.bigint "empregado_id", null: false
     t.decimal "valor"
+    t.string "data_da_solicitacao"
+    t.string "status"
+    t.string "taxa"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "mes_ano"
